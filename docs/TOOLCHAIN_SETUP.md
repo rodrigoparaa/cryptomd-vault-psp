@@ -1,4 +1,4 @@
-# 🛠️ Toolchain, Companion CLI & USB Deployment Guide — `05_CryptoMD_Vault`
+# Toolchain, Companion CLI & USB Deployment Guide — `05_CryptoMD_Vault`
 
 ## 1. Host Unit Testing & Companion CLI (macOS / Linux)
 

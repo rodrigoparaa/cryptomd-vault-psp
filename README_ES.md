@@ -1,4 +1,4 @@
-# 🔐 PSP Go CryptoMD Vault (`05_CryptoMD_Vault`)
+# PSP Go CryptoMD Vault (`05_CryptoMD_Vault`)
 
 [![Platform](https://img.shields.io/badge/Plataforma-Sony%20PSP%20Go%20%7C%20PSP--N1000-003791?style=for-the-badge&logo=playstation&logoColor=white)](https://en.wikipedia.org/wiki/PlayStation_Portable_Go)
 [![Architecture](https://img.shields.io/badge/Arquitectura-MIPS%20Allegrex%20R4000%20%40%20333MHz-blue?style=for-the-badge)](https://en.wikipedia.org/wiki/PlayStation_Portable_hardware)
@@ -12,31 +12,31 @@
 
 ---
 
-### 🌐 Idioma / Language
-* 🇬🇧 **[English Documentation (README.md)](README.md)**
+### Idioma / Language
+* **[English Documentation (README.md)](README.md)**
 * **Español** (Documento Actual)
-* 📐 **[Memoria Técnica de Arquitectura y Auditoría de Seguridad (docs/ARCHITECTURE.md)](docs/ARCHITECTURE.md)**
-* 🛠️ **[Guía de Toolchain, CLI y Despliegue USB (docs/TOOLCHAIN_SETUP.md)](docs/TOOLCHAIN_SETUP.md)**
+* **[Memoria Técnica de Arquitectura y Auditoría de Seguridad (docs/ARCHITECTURE.md)](docs/ARCHITECTURE.md)**
+* **[Guía de Toolchain, CLI y Despliegue USB (docs/TOOLCHAIN_SETUP.md)](docs/TOOLCHAIN_SETUP.md)**
 
 ---
 
-## 📑 Tabla de Contenidos
-1. [Visión General del Proyecto](#-visión-general-del-proyecto)
-2. [Los 4 Niveles Criptográficos](#-los-4-niveles-criptográficos)
-3. [Características Principales](#-características-principales)
-4. [Interfaz de Usuario y Ergonomía de Claves](#-interfaz-de-usuario-y-ergonomía-de-claves)
-5. [Matriz de Controles e Interacción](#-matriz-de-controles-e-interacción)
-6. [Especificación del Contenedor Binario (`.pdoc`)](#-especificación-del-contenedor-binario-pdoc)
-7. [Auditoría de Seguridad y Mitigación de Vulnerabilidades](#-auditoría-de-seguridad-y-mitigación-de-vulnerabilidades)
-8. [Estructura del Proyecto](#-estructura-del-proyecto)
-9. [Compilación, Pruebas y Herramienta CLI](#-compilación-pruebas-y-herramienta-cli)
-10. [Seguridad de Hardware y Despliegue por USB](#-seguridad-de-hardware-y-despliegue-por-usb)
-11. [Especificaciones Técnicas](#-especificaciones-técnicas)
-12. [Licencia](#-licencia)
+## Tabla de Contenidos
+1. [Visión General del Proyecto](#visión-general-del-proyecto)
+2. [Los 4 Niveles Criptográficos](#los-4-niveles-criptográficos)
+3. [Características Principales](#características-principales)
+4. [Interfaz de Usuario y Ergonomía de Claves](#interfaz-de-usuario-y-ergonomía-de-claves)
+5. [Matriz de Controles e Interacción](#matriz-de-controles-e-interacción)
+6. [Especificación del Contenedor Binario (`.pdoc`)](#especificación-del-contenedor-binario-pdoc)
+7. [Auditoría de Seguridad y Mitigación de Vulnerabilidades](#auditoría-de-seguridad-y-mitigación-de-vulnerabilidades)
+8. [Estructura del Proyecto](#estructura-del-proyecto)
+9. [Compilación, Pruebas y Herramienta CLI](#compilación-pruebas-y-herramienta-cli)
+10. [Seguridad de Hardware y Despliegue por USB](#seguridad-de-hardware-y-despliegue-por-usb)
+11. [Especificaciones Técnicas](#especificaciones-técnicas)
+12. [Licencia](#licencia)
 
 ---
 
-## 🎯 Visión General del Proyecto
+## Visión General del Proyecto
 
 **CryptoMD Vault** transforma la consola Sony PSP Go en una bóveda criptográfica de bolsillo físicamente aislada de red (*air-gapped*) para proteger notas confidenciales y documentación técnica en formato Markdown (`.md`) o texto plano (`.txt`). Construido desde cero en **C99 estricto** sin ninguna dependencia externa, implementa estándares oficiales del NIST y del IETF optimizados para el procesador MIPS Allegrex R4000 de 32 bits.
 
@@ -44,7 +44,7 @@ Al abrir un contenedor cifrado `.pdoc`, la aplicación verifica la firma **HMAC-
 
 ---
 
-## 🛡️ Los 4 Niveles Criptográficos
+## Los 4 Niveles Criptográficos
 
 | Nivel | Algoritmo | Método de Clave | Derivación e Integridad | Propósito y Perfil Técnico |
 | :--- | :--- | :--- | :--- | :--- |
@@ -55,26 +55,26 @@ Al abrir un contenedor cifrado `.pdoc`, la aplicación verifica la firma **HMAC-
 
 ---
 
-## ✨ Características Principales
+## Características Principales
 
-* 🧠 **Bóveda Efímera en RAM (*Zero-Disk-Footprint*):**
+* **Bóveda Efímera en RAM (*Zero-Disk-Footprint*):**
   * El texto descifrado reside únicamente en SDRAM volátil. Al salir con `O`, activar el **Panic Lock** (`L + R` > 1 segundo) o cumplirse los **120 segundos de inactividad**, toda la memoria sensible se sobrescribe con ceros mediante punteros `volatile uint8_t *` (`crypto_zeroize`).
-* 🩻 **Modo Rayos X en Tiempo Real (*Hold-to-See-Ciphertext*):**
+* **Modo Rayos X en Tiempo Real (*Hold-to-See-Ciphertext*):**
   * Mantén pulsado `SELECT` dentro del visor de bóveda para inspeccionar en vivo el criptograma subyacente (texto Markdown rotado en Niveles 1 y 2, o volcado hexadecimal de memoria en Niveles 3 y 4).
-* 🎮 **Entrada de Clave Ergonómica y Selector de Longitud:**
+* **Entrada de Clave Ergonómica y Selector de Longitud:**
   * **Selector de 2, 4 o 6 teclas:** Antes de introducir una combinación física en los Niveles 3 y 4, el usuario elige si desea una clave de **2, 4 o 6 botones** (`L`, `R`, Cruceta y botones geométricos) y confirma su guardado con **`SELECT`**.
   * **Pantalla dedicada de descifrado César:** Al abrir un archivo cifrado con César, se muestra una pantalla exclusiva que pregunta el número de clave con un **display gigante de 7 segmentos centrado en mitad de pantalla** (reiniciado siempre en `01`).
-* 🔄 **Ciclo Limpio de Archivos y Restauración de Extensión Original:**
+* **Ciclo Limpio de Archivos y Restauración de Extensión Original:**
   * Al cifrar `nota.md` o `apuntes.txt`, se genera `nota.pdoc` o `apuntes.pdoc` almacenando el formato original (`PDOC_FMT_MD` o `PDOC_FMT_TXT`) en la cabecera autenticada.
   * Al pulsar `START` (*Guardar Descifrado*) en el visor de bóveda, el archivo se restaura automáticamente con su **nombre y extensión original (`.md` o `.txt`)** y **se elimina el archivo `.pdoc` cifrado**, evitando que se acumulen archivos duplicados.
-* 🔥 **Destructor Forense FAT32 (*Shredder* de 2 Pasadas):**
+* **Destructor Forense FAT32 (*Shredder* de 2 Pasadas):**
   * Permite destruir el archivo original en claro tras cifrarlo sobrescribiendo sus sectores físicos primero con entropía pseudoaleatoria y luego con ceros antes de desvincularlo del directorio FAT32.
-* 📝 **Renderizador Markdown Directo a VRAM a 60 FPS:**
+* **Renderizador Markdown Directo a VRAM a 60 FPS:**
   * Escritura directa en VRAM no cacheada (`0x44000000`) con limpieza automática de marcadores inline (`**negrita**`, `*cursiva*`, `` `código` ``), simplificación de enlaces `[texto](url)`, soporte de tildes y eñes (`á, é, í, ó, ú, ñ, ¿, ¡`) y scroll analógico inercial.
 
 ---
 
-## 🖥️ Interfaz de Usuario y Ergonomía de Claves
+## Interfaz de Usuario y Ergonomía de Claves
 
 ### 1. Pantalla de Descifrado César (Número Grande Centrado)
 ```
@@ -117,7 +117,7 @@ Al abrir un contenedor cifrado `.pdoc`, la aplicación verifica la firma **HMAC-
 
 ---
 
-## 🎮 Matriz de Controles e Interacción
+## Matriz de Controles e Interacción
 
 | Control | Explorador Documental | Lector en Claro | Visor Bóveda RAM | Pantallas de Clave |
 | :--- | :--- | :--- | :--- | :--- |
@@ -135,7 +135,7 @@ Al abrir un contenedor cifrado `.pdoc`, la aplicación verifica la firma **HMAC-
 
 ---
 
-## 📦 Especificación del Contenedor Binario (`.pdoc`)
+## Especificación del Contenedor Binario (`.pdoc`)
 
 Cada archivo `.pdoc` encapsula el documento bajo un esquema autenticado **Encrypt-then-MAC** compuesto por una cabecera pública de 64 bytes, el cuerpo cifrado y una etiqueta **HMAC-SHA256** de 32 bytes al final del archivo:
 
@@ -152,7 +152,7 @@ Cada archivo `.pdoc` encapsula el documento bajo un esquema autenticado **Encryp
 
 ---
 
-## 🔒 Auditoría de Seguridad y Mitigación de Vulnerabilidades
+## Auditoría de Seguridad y Mitigación de Vulnerabilidades
 
 El código ha sido auditado y blindado frente a vulnerabilidades clásicas en C embebido:
 
@@ -167,7 +167,7 @@ El código ha sido auditado y blindado frente a vulnerabilidades clásicas en C 
 
 ---
 
-## 🧰 Compilación, Pruebas y Herramienta CLI
+## Compilación, Pruebas y Herramienta CLI
 
 ```bash
 # 1. Ejecutar las 60 pruebas unitarias (NIST, RFC, Markdown y Seguridad)
@@ -183,6 +183,6 @@ make clean && make
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 Distribuido bajo la **Licencia MIT**. Consulta el archivo [LICENSE](LICENSE) para más información.

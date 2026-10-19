@@ -1,4 +1,4 @@
-# 📐 Technical Architecture & Security Audit Report — `05_CryptoMD_Vault`
+# Technical Architecture & Security Audit Report — `05_CryptoMD_Vault`
 
 > **Detailed engineering specification, memory layout, cryptographic protocol design, and vulnerability audit for the Sony PlayStation Portable Go (PSP-N1000).**
 

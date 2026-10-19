@@ -1,4 +1,4 @@
-# 🔐 PSP Go CryptoMD Vault (`05_CryptoMD_Vault`)
+# PSP Go CryptoMD Vault (`05_CryptoMD_Vault`)
 
 [![Platform](https://img.shields.io/badge/Platform-Sony%20PSP%20Go%20%7C%20PSP--N1000-003791?style=for-the-badge&logo=playstation&logoColor=white)](https://en.wikipedia.org/wiki/PlayStation_Portable_Go)
 [![Architecture](https://img.shields.io/badge/Architecture-MIPS%20Allegrex%20R4000%20%40%20333MHz-blue?style=for-the-badge)](https://en.wikipedia.org/wiki/PlayStation_Portable_hardware)
@@ -12,31 +12,31 @@
 
 ---
 
-### 🌐 Language / Idioma
+### Language / Idioma
 * **English** (Current Document)
-* 🇪🇸 **[Documentación Completa en Español (README_ES.md)](README_ES.md)**
-* 📐 **[Technical Architecture & Security Audit (docs/ARCHITECTURE.md)](docs/ARCHITECTURE.md)**
-* 🛠️ **[Toolchain & Deployment Guide (docs/TOOLCHAIN_SETUP.md)](docs/TOOLCHAIN_SETUP.md)**
+* **[Documentación Completa en Español (README_ES.md)](README_ES.md)**
+* **[Technical Architecture & Security Audit (docs/ARCHITECTURE.md)](docs/ARCHITECTURE.md)**
+* **[Toolchain & Deployment Guide (docs/TOOLCHAIN_SETUP.md)](docs/TOOLCHAIN_SETUP.md)**
 
 ---
 
-## 📑 Table of Contents
-1. [Project Overview](#-project-overview)
-2. [The 4 Cryptographic Tiers](#-the-4-cryptographic-tiers)
-3. [Key Features](#-key-features)
-4. [User Interface & Ergonomic Key Entry](#-user-interface--ergonomic-key-entry)
-5. [Controls & Interaction Matrix](#-controls--interaction-matrix)
-6. [Binary Container Format (`.pdoc`)](#-binary-container-format-pdoc)
-7. [Security Architecture & Vulnerability Hardening](#-security-architecture--vulnerability-hardening)
-8. [Project Structure](#-project-structure)
-9. [Building, Testing & Companion CLI](#-building-testing--companion-cli)
-10. [Hardware Safety & USB Deployment](#-hardware-safety--usb-deployment)
-11. [Technical Specifications](#-technical-specifications)
-12. [License](#-license)
+## Table of Contents
+1. [Project Overview](#project-overview)
+2. [The 4 Cryptographic Tiers](#the-4-cryptographic-tiers)
+3. [Key Features](#key-features)
+4. [User Interface & Ergonomic Key Entry](#user-interface--ergonomic-key-entry)
+5. [Controls & Interaction Matrix](#controls--interaction-matrix)
+6. [Binary Container Format (`.pdoc`)](#binary-container-format-pdoc)
+7. [Security Architecture & Vulnerability Hardening](#security-architecture--vulnerability-hardening)
+8. [Project Structure](#project-structure)
+9. [Building, Testing & Companion CLI](#building-testing--companion-cli)
+10. [Hardware Safety & USB Deployment](#hardware-safety--usb-deployment)
+11. [Technical Specifications](#technical-specifications)
+12. [License](#license)
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 **CryptoMD Vault** turns the Sony PSP Go into a pocket-sized, physically isolated (*air-gapped*) cryptographic terminal for confidential notes and technical documentation. Designed from scratch in strict **C99** with **zero external library dependencies**, it implements NIST and IETF cryptographic primitives natively for the 32-bit MIPS Allegrex R4000 processor.
 
@@ -63,7 +63,7 @@ When opening an encrypted `.pdoc` container, **CryptoMD Vault** verifies the **H
 
 ---
 
-## 🛡️ The 4 Cryptographic Tiers
+## The 4 Cryptographic Tiers
 
 Users can choose the exact balance between classical educational ciphers and modern authenticated encryption when protecting any `.md` or `.txt` file:
 
@@ -76,29 +76,29 @@ Users can choose the exact balance between classical educational ciphers and mod
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-* 🧠 **Zero-Footprint Ephemeral RAM Vault:**
+* **Zero-Footprint Ephemeral RAM Vault:**
   * Decrypted documents exist only in volatile SDRAM (`g_app.plain_buf`).
   * Closing a document (`O`), triggering the **Panic Lock** (`L + R` held for 1 second), or reaching the **120-second inactivity timeout** immediately scrubs all sensitive buffers via `crypto_zeroize()` using `volatile uint8_t *` pointers to prevent compiler Dead-Store Elimination (DSE).
-* 🩻 **Real-Time X-Ray Mode (*Hold-to-See-Ciphertext*):**
+* **Real-Time X-Ray Mode (*Hold-to-See-Ciphertext*):**
   * Hold `SELECT` inside the Vault Reader to instantaneously switch between the decrypted Markdown document and the raw underlying ciphertext (formatted structural ciphertext for Levels 1–2, or live hexadecimal memory dump for Levels 3–4).
-* 🎮 **Shoulder-Surfing-Proof Physical Key Entry:**
+* **Shoulder-Surfing-Proof Physical Key Entry:**
   * Instead of a slow on-screen QWERTY keyboard, Levels 3 and 4 allow selecting a key length of **2, 4, or 6 physical button presses** (`L`, `R`, D-Pad, and geometric buttons) confirmed with `SELECT`.
   * Dedicated **Caesar Decryption Dial** featuring a giant, centered 7-segment display (`01`–`25`) that resets to `01` before every operation.
-* 🔄 **Clean File Lifecycle & Extension Preservation:**
+* **Clean File Lifecycle & Extension Preservation:**
   * Encrypting `notes.md` or `secret.txt` produces `notes.pdoc` / `secret.pdoc` while recording the original format (`PDOC_FMT_MD` or `PDOC_FMT_TXT`) inside the authenticated header.
   * Pressing `START` (*Save & Restore*) inside the Vault Reader atomically restores the plaintext file with its **original filename and extension** (`.md` or `.txt`) and automatically shreds/removes the `.pdoc` file so duplicates never accumulate.
-* 🔥 **2-Pass FAT32 Forensic Shredder:**
+* **2-Pass FAT32 Forensic Shredder:**
   * After encrypting a file, a confirmation modal lets you either keep the original plaintext or destroy it via a 2-pass physical cluster overwrite (Pass 1: CSPRNG entropy stream; Pass 2: zero-fill) before unlinking the FAT32 directory entry.
-* 📝 **60 FPS Direct-VRAM Markdown Renderer:**
+* **60 FPS Direct-VRAM Markdown Renderer:**
   * Writes directly to uncached embedded VRAM (`0x44000000`) with hardware buffer swapping (`sceGuSwapBuffers()`), rendering `# H1`, `## H2`, `### H3`, fenced code blocks, blockquotes, wrapped bullet lists, and Spanish accents (`á, é, í, ó, ú, ñ, ¿, ¡`) at 60 FPS with analog inertial scrolling.
-* 💻 **Cross-Platform Host CLI (`tools/cryptodoc_cli`):**
+* **Cross-Platform Host CLI (`tools/cryptodoc_cli`):**
   * Companion command-line utility for macOS and Linux to pack, unpack, verify, inspect, and shred `.pdoc` containers from a computer.
 
 ---
 
-## 🖥️ User Interface & Ergonomic Key Entry
+## User Interface & Ergonomic Key Entry
 
 ### 1. Caesar Decryption Screen (Centered Giant 7-Segment Dial)
 When unlocking a Level 1 `.pdoc` container, the interface presents a dedicated challenge screen with a large 7-segment digital dial centered in the viewport:
@@ -145,7 +145,7 @@ For Levels 3 (AES-256) and 4 (ChaCha20), the wizard first asks the user to choos
 
 ---
 
-## 🎮 Controls & Interaction Matrix
+## Controls & Interaction Matrix
 
 | Control | Document Explorer | Plaintext Reader | Vault RAM Reader | Key Entry Screens |
 | :--- | :--- | :--- | :--- | :--- |
@@ -163,7 +163,7 @@ For Levels 3 (AES-256) and 4 (ChaCha20), the wizard first asks the user to choos
 
 ---
 
-## 📦 Binary Container Format (`.pdoc`)
+## Binary Container Format (`.pdoc`)
 
 Every `.pdoc` file uses an authenticated **Encrypt-then-MAC** binary envelope consisting of a 64-byte little-endian header, variable-length ciphertext payload, and a 32-byte trailing **HMAC-SHA256** authentication tag:
 
@@ -192,7 +192,7 @@ Every `.pdoc` file uses an authenticated **Encrypt-then-MAC** binary envelope co
 
 ---
 
-## 🔒 Security Architecture & Vulnerability Hardening
+## Security Architecture & Vulnerability Hardening
 
 This codebase has undergone a comprehensive security audit targeting embedded C99 failure modes:
 
@@ -210,7 +210,7 @@ This codebase has undergone a comprehensive security audit targeting embedded C9
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 05_CryptoMD_Vault/
@@ -252,7 +252,7 @@ This codebase has undergone a comprehensive security audit targeting embedded C9
 
 ---
 
-## 🧰 Building, Testing & Companion CLI
+## Building, Testing & Companion CLI
 
 ### 1. Run the Automated Unit Test Suite (macOS / Linux Host)
 Verify all 60 NIST/RFC cryptographic vectors, Markdown parser rules, and security boundary checks natively with `clang` or `gcc`:
@@ -317,7 +317,7 @@ docker run --rm -v "$PWD":/src psp-cryptomd-builder
 
 ---
 
-## ⚠️ Hardware Safety & USB Deployment
+## Hardware Safety & USB Deployment
 
 > [!CAUTION]
 > **Strict Hardware Safety on PSP Go (PSP-N1000):**
@@ -342,7 +342,7 @@ sync
 
 ---
 
-## 📊 Technical Specifications
+## Technical Specifications
 
 | Parameter | Specification | Notes |
 | :--- | :--- | :--- |
@@ -356,6 +356,6 @@ sync
 
 ---
 
-## 📄 License
+## License
 
 This project is released under the **MIT License**. See the [LICENSE](LICENSE) file for full details.

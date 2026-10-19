@@ -1,0 +1,23 @@
+# Build Artifacts
+*.o
+*.elf
+*.prx
+*.pbp
+EBOOT.PBP
+PARAM.SFO
+
+# Host Binaries & Encrypted Test Containers
+tests/test_core
+tools/cryptodoc_cli
+*.tmp
+*.pdoc
+
+# Local Context & Working Notes (Not for public repository)
+Contexto Proyecto PSPGO.md
+PLANOS_CRYPTOMD_VAULT.md
+
+# macOS Metadata
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
